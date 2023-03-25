@@ -234,6 +234,13 @@ def crawl_loop(initial_sa_tuples: List[Tuple[str, Credentials, List[str]]],
           credentials
         )
 
+      # Get infomation about DNSSEC hash algorithim 
+      if is_set(scan_config, 'dnssec_hash'):
+        project_result['dnssec_hash'] = crawl.get_dnssec_hash(
+          project_id,
+          credentials
+        )
+
       # trying to impersonate SAs within project
       if scan_config is not None:
         impers = scan_config.get('service_accounts', None)

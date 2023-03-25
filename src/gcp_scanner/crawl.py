@@ -72,6 +72,34 @@ def fetch_project_info(project_name: str,
 
   return project_info
 
+def get_dnssec_hash(project_id:  str, credentials: Credentials) -> List[Dict[str, Any]]:
+  """Retrieve a list of Cloud DNS hash type by credentials provided.
+
+  Args:
+    credentials: An google.oauth2.credentials.Credentials object.
+
+  Returns:
+    A list of Project objects from cloudresourcemanager RestAPI.
+  """
+
+  logging.info("Retrieving projects list")
+  project_list = list()
+  try:
+    service = googleapiclient.discovery.build(
+        "cloudresourcemanager",
+        "v1",
+        credentials=credentials,
+        cache_discovery=False)
+    request = service.projects().get(project=project_id).list()
+    while request is not None:
+      response = request.execute()
+      project_list = response.get("quota",[]).get("whitelistedKeySpecs", [])
+      request = service.projects().list_next(
+          previous_request=request, previous_response=response)
+  except Exception:
+    logging.info("Failed to enumerate projects")
+    logging.info(sys.exc_info())
+  return project_list
 
 def get_project_list(credentials: Credentials) -> List[Dict[str, Any]]:
   """Retrieve a list of projects accessible by credentials provided.

@@ -82,5 +82,9 @@
   },
   "dns_policies": {
     "fetch": true
+  },
+  "dnssec_hash": {
+    "fetch": true,
+    "comment": "Get list of hash algorithm for Cloud DNS"
   }
 }
