@@ -522,3 +522,12 @@ class TestCrawler(unittest.TestCase):
         "dns_policies",
       )
     )
+
+  def test_dnssec_hash(self):
+    """Test Cloud DNS of DNSSEC."""
+    self.assertTrue(
+      verify(
+        crawl.get_dnssec_hash(PROJECT_NAME, self.compute_client),
+        "dnssec_hash",
+      )
+    )
